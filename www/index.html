@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MIDI Web Player</title>
+	<link rel="stylesheet" href="css/styles.css">
+    <script src="https://raw.githubusercontent.com/processing-js/processing-js/v1.4.8/processing.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" onclick="changePanel('playlist')">Playlist</a>
+            <a href="#" onclick="changePanel('pianoroll')">Piano Roll</a>
+            <a href="#" onclick="changePanel('visualize')">Visualize</a>
+            <a href="#" onclick="changePanel('about')">About</a>
+        </nav>
+    </header>
+    <main>
+        <div id="playlist" class="panel">
+
+        </div>
+        <div id="pianoroll" class="panel">
+
+        </div>
+        <div id="visualize" class="panel">
+
+        </div>
+        <div id="about" class="panel">
+
+        </div>
+    </main>
+</body>
+</html>
