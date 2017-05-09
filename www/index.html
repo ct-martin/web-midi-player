@@ -4,17 +4,28 @@
     <meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>MIDI Web Player</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/styles.css">
     <script src="https://raw.githubusercontent.com/processing-js/processing-js/v1.4.8/processing.min.js"></script>
 </head>
 <body>
     <header>
         <nav>
-            <a href="#" onclick="changePanel('playlist')">Playlist</a>
-            <a href="#" onclick="changePanel('pianoroll')">Piano Roll</a>
-            <a href="#" onclick="changePanel('visualize')">Visualize</a>
-            <a href="#" onclick="changePanel('about')">About</a>
+            <p class="nav-title">Web MIDI Player</p>
+            <a href="#" id="link-playlist" onclick="changePanel('playlist')">Playlist</a>
+            <a href="#" id="link-pianoroll" onclick="changePanel('pianoroll')">Piano Roll</a>
+            <a href="#" id ="link-visualize" onclick="changePanel('visualize')">Visualize</a>
+            <a href="#" id="link-about" onclick="changePanel('about')">About</a>
         </nav>
+        <div class="controls">
+            <div class="controls-buttons">
+                <span class="fa fa-backward fa-2x"></span>
+                <span class="fa fa-play-circle fa-3x"></span>
+                <span class="fa fa-pause-circle fa-3x"></span>
+                <span class="fa fa-forward fa-2x"></span>
+            </div>
+        </div>
     </header>
     <main>
         <div id="playlist" class="panel">
@@ -28,6 +39,9 @@
         </div>
         <div id="about" class="panel">
 
+        </div>
+        <div id="toosmall">
+            <p>Hey, your browser window is too small for this to work. Sorry.</p>
         </div>
     </main>
 </body>
