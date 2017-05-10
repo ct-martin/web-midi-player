@@ -1,3 +1,4 @@
+/* Base formatting */
 body {
     background-color: black;
     color: lightgrey;
@@ -7,9 +8,17 @@ body {
     margin: 0;
     padding: 0;
 }
+a {
+    text-decoration: none;
+    color: lightgreen;
+}
+a:hover {
+    text-decoration: underline;
+}
 
+/* Header (nav + control buttons) */
 header {
-    height: 70px;
+    height: 100px;
     position: fixed;
     top: 0;
     left: 0;
@@ -34,18 +43,52 @@ nav p.nav-title {
 nav a {
     padding: 15px 20px;
     display: inline-block;
-    text-decoration: none;
     color: lightgrey;
-}
-nav a:hover {
-    text-decoration: underline;
 }
 nav a.active {
     color: lightgreen;
 }
-
-.panel {
+#controls {
+    width: 600px;
+    margin: 0 auto;
+}
+#control-buttons {
+    display: inline-block;
+    width: 48px;
+}
+#control-buttons .fa {
+    display: inline;
+    margin: 0 auto;
+}
+#control-buttons .fa-pause-circle {
     display: none;
+}
+#control-tracking {
+    display: inline-block;
+    width: 500px;
+    position: absolute;
+    margin-left: 22px;
+}
+#control-time {
+    margin: 3px;
+    height: 22px; /* Actual size, but redefined for formatting */
+}
+#control-timeline {
+    width: 500px;
+    height: 5px;
+    margin: 7.5px auto;
+    background-color: lightgrey;
+}
+#control-timeline-completed {
+    width: 0;
+    height: 5px;
+    margin: 0 auto;
+    background-color: lightgreen;
+}
+
+
+/* Panels */
+main {
     height: 100%;
     margin: 0;
     padding: 0;
@@ -53,10 +96,26 @@ nav a.active {
     width: 100%;
     height: 100%;
 }
-#playlist {
+.panel {
+    display: none;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+}
+#about {
     display: block;
 }
+.container {
+    width: 90%;
+    min-width: 600px;
+    margin: 120px auto 0 auto;
+    background-color: midnightblue;
+    padding: 5px 15px;
+}
 
+/* Anti-mobile (since it won't work cleanly anyway) */
 #toosmall {
     display: none;
 }
@@ -67,4 +126,38 @@ nav a.active {
     nav, .panel {
         display: none;
     }
+}
+
+/* Playlist CSS */
+input#files {
+    background-color: lightgrey;
+    padding: 10px;
+    border-radius: 10px;
+    color: black;
+}
+input#files:hover {
+    background-color: lightgreen;
+}
+#playlist-list {
+    margin: 15px 0;
+    border: 1px solid lightgreen;
+    border-radius: 15px;
+}
+.playlist-list-item, #playlist-list-empty {
+    margin: 0;
+    border-bottom: 1px solid lightgreen;
+    padding: 15px;
+}
+.playlist-list-item:last-child {
+    border: none;
+}
+.playlist-list-item:hover {
+    text-decoration: underline;
+}
+#playlist-list #playlist-list-empty {
+    display: none;
+    border: none;
+}
+#playlist-list #playlist-list-empty:only-child {
+    display: block;
 }
