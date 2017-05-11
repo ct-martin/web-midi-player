@@ -77,13 +77,14 @@ nav a.active {
     width: 500px;
     height: 5px;
     margin: 7.5px auto;
-    background-color: lightgrey;
+    border: 1px solid lightgrey;
 }
 #control-timeline-completed {
     width: 0;
     height: 5px;
     margin: 0 auto;
-    background-color: lightgreen;
+    float: left;
+    fill: lightgreen;
 }
 
 

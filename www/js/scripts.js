@@ -15,20 +15,13 @@ function changePanel(name) {
 
 // File Uploading
 function handleFileSelect(evt) {
-    var files = evt.target.files; // FileList object
-
-    // Loop through the FileList and render image files as thumbnails.
+    var files = evt.target.files;
     for (var i = 0, f; f = files[i]; i++) {
-
-        // Only process image files.
         if (!f.type.match('audio.midi')) {
             alert("Only MIDI files are allowed");
             continue;
         }
-
         var reader = new FileReader();
-
-        // Closure to capture the file information.
         reader.onload = (function(theFile) {
             return function(e) {
                 if(songs[escape(theFile.name)]) return;
@@ -36,12 +29,11 @@ function handleFileSelect(evt) {
                 $("#playlist-list").append("<div class=\"playlist-list-item\" onclick=\"playSong('" + escape(theFile.name) + "')\"><span class=\"fa fa-play-circle\"></span> " + escape(theFile.name) + "</div>");
             };
         })(f);
-
-        // Read in the image file as a data URL.
         reader.readAsDataURL(f);
     }
 }
 
+// Time formatting for controls
 function timeFormatting(n) {
     var minutes = n / 60 >> 0;
     var seconds = String(n - (minutes * 60) >> 0);
@@ -49,6 +41,7 @@ function timeFormatting(n) {
     return minutes + ":" + seconds;
 };
 
+// Some stuff for cleaner play/pause
 function changeState(state) {
     if(state == playState) {
         return;
@@ -83,12 +76,13 @@ function changeState(state) {
     }
 }
 
+// Start a new song
 function playSong(name) {
     MIDI.Player.loadFile(songs[name], function() { currentSong = name; changeState("start") });
 }
 
+// Start JS things when page ready
 $(document).ready( function() {
-    console.log("Document Ready");
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
     MIDI.loadPlugin({
@@ -100,19 +94,22 @@ $(document).ready( function() {
             }
         }
     });
-
    MIDI.Player.setAnimation(function(data, element) {
         var percent = data.now / data.end;
-        var now = data.now >> 0; // where we are now
-        var end = data.end >> 0; // end of song
-        if (now === end) { // go to next song
-            /*
-            var id = ++songid % song.length;
-            player.loadFile(song[id], player.start); // load MIDI
-            */
+        var now = data.now >> 0;
+        var end = data.end >> 0;
+        if (now === end) {
             changeState("end");
         }
-        // display the information to the user
         $("#control-time").text(timeFormatting(now) + " / " + timeFormatting(end));
+        $("#control-timeline-completed").css('width', (percent * 500) + "px");
 	});
+
+    // Visualization
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    $("#visualize").append( renderer.domElement );
 });
