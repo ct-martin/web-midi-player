@@ -28,16 +28,14 @@ var activeNotesThree = [];
 var activeNotesP5 = [];
 
 // Set up defaults
-function init() {
-    cameraThree.position.x = 0;
-    cameraThree.position.y = 0;
-    cameraThree.position.z = 1;
-    cameraThree.lookAt(new THREE.Vector3(0,0,0));
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    for(var i = 0; i < 16; i++) {
-        activeNotesThree[i] = [];
-        activeNotesP5[i] = [];
-    }
+cameraThree.position.x = 0;
+cameraThree.position.y = 0;
+cameraThree.position.z = 1;
+cameraThree.lookAt(new THREE.Vector3(0,0,0));
+renderer.setSize( window.innerWidth, window.innerHeight );
+for(var i = 0; i < 16; i++) {
+    activeNotesThree[i] = [];
+    activeNotesP5[i] = [];
 }
 
 // Panel changing
@@ -125,8 +123,6 @@ function clearScene() {
     }
 }
 
-init();
-
 // Start JS things when page ready
 $(document).ready( function() {
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
@@ -175,14 +171,14 @@ $(document).ready( function() {
             sceneThree.add( ptObj );
             activeNotesThree[channel][note] = ptObj;
             activeNotesP5[channel].push(note);
-            redraw()
+            redrawKey(channel, note);
         } else if(message == 128) { // noteOff
             if(activeNotesThree[channel][note] == null)
                 return;
             sceneThree.remove(activeNotesThree[channel][note]);
             delete activeNotesThree[channel][note];
             delete activeNotesP5[channel][activeNotesP5[channel].indexOf(note)];
-            redraw();
+            redrawKey(channel, note);
         } else if(message == 123) {
             clearScene();
         }
@@ -206,35 +202,36 @@ function setup() {
     canvas.parent('pianoroll');
     noLoop();
 
-    var yMin = $("header").height();
-    var xI = windowWidth;
-    var yI = (windowHeight - yMin) / 16;
-    var paddingX = 10;
-    var paddingY = 5;
     for(var i = 0; i < 16; i++) {
     //for(var i = 0; i < 1; i++) {
-        drawPiano(paddingX, yMin + (yI * i) + paddingY, xI - paddingX, yMin + (yI * (i+1)) - paddingY, i);
+        for(var j = 0; j < 128; j++) {
+            redrawKey(i, j);
+        }
     }
 }
 function draw() {
     //console.log('draw');
 }
-function drawKeyDirect(channel, note) {
-    // TODO
+function redrawKey(channel, note) {
+    //console.log("Key: " + note + "@" + channel);
+    var yMin = $("header").height();
+    var xI = windowWidth;
+    var yI = (windowHeight - yMin) / 16;
+    var paddingX = 10;
+    var paddingY = 5;
+    drawKeyPiano(paddingX, yMin + (yI * channel) + paddingY, xI - paddingX, yMin + (yI * (channel+1)) - paddingY, channel, note);
 }
-function drawPiano(x1, y1, x2, y2, channel) {
-    //console.log('draw piano: (' + x1 + ',' + y1 + ') to (' + x2 + ',' + y2 + ')');
+function drawKeyPiano(x1, y1, x2, y2, channel, note) {
+    //console.log('draw piano for '+ note + '@' + channel + ': (' + x1 + ',' + y1 + ') to (' + x2 + ',' + y2 + ')');
     var xI = (x2 - x1) / 75;
-    for(var i = 0; i < 11; i++) {
-        if (i == 10) {
-            drawOctave(x1 + (xI * 7 * i), y1, x1 + (xI * 7 * i) + (xI * 5), y2, i, channel);
-        } else {
-            drawOctave(x1 + (xI * 7 * i), y1, x1 + (xI * 7 * i) + (xI * 7), y2, i, channel);
-        }
-    }
+    var octave = (note - (note % 12)) / 12;
+    var wholeOctave = 7; // true
+    if (octave == 10)
+        wholeOctave = 5; // false
+    drawKeyOctave(x1 + (xI * 7 * octave), y1, x1 + (xI * 7 * octave) + (xI * wholeOctave), y2, octave, channel, note);
 }
-function drawOctave(x1, y1, x2, y2, octave, channel) {
-    //console.log('draw octave: (' + x1 + ',' + y1 + ') to (' + x2 + ',' + y2 + ')');
+function drawKeyOctave(x1, y1, x2, y2, octave, channel, note) {
+    //console.log('draw octave for '+ note + '@' + channel + ': (' + x1 + ',' + y1 + ') to (' + x2 + ',' + y2 + ')');
     var wholeNoteNums = [0, 2, 4, 5, 7, 9, 11];
     var halfNoteNums = [1, 3, 6, 8, 10];
     var yI = (y2 - y1) / 2;
@@ -247,21 +244,22 @@ function drawOctave(x1, y1, x2, y2, octave, channel) {
         var totalWhole = 7;
         var totalHalf = 5;
     }
-    for(var i = 0; i < totalWhole; i++) {
-        drawKey(x1 + (xI * i), y1 + yI, x1 + (xI * (i + 1)), y2, (12 * octave) + wholeNoteNums[i], false, channel);
-    }
-    for(var i = 0; i < totalHalf; i++) {
-        drawKey(x1 + (xI * i) + (xI / 2) + (i > 1 ? xI : 0), y1, x1 + (xI * (i + 1)) + (xI / 2) + (i > 1 ? xI : 0), y1 + yI, (12 * octave) + halfNoteNums[i], true, channel);
+    var asWholeNote = wholeNoteNums.indexOf(note % 12);
+    if(asWholeNote != -1) {
+        drawKeyKey(x1 + (xI * asWholeNote), y1 + yI, x1 + (xI * (asWholeNote + 1)), y2, note, false, channel);
+    } else {
+        var asHalfNote = halfNoteNums.indexOf(note % 12);
+        drawKeyKey(x1 + (xI * asHalfNote) + (xI / 2) + (asHalfNote > 1 ? xI : 0), y1, x1 + (xI * (asHalfNote + 1)) + (xI / 2) + (asHalfNote > 1 ? xI : 0), y1 + yI, note, true, channel);
     }
 }
-function drawKey(x1, y1, x2, y2, note, half, channel) {
-    //console.log('draw key: (' + x1 + ',' + y1 + ') to (' + x2 + ',' + y2 + ')');
-    if(half) {
+function drawKeyKey(x1, y1, x2, y2, note, half, channel) {
+    //console.log('draw key for '+ note + '@' + channel + ': (' + x1 + ',' + y1 + ') to (' + x2 + ',' + y2 + ')');
+    if(activeNotesP5[channel].indexOf(note) != -1) {
+        fill(color('aqua'));
+    } else if(half) {
         fill(color('dimgrey'));
     } else {
         fill(color('darkgrey'));
     }
-    stroke(color('black'));
-    strokeWeight(2);
     rect(x1, y1, x2 - x1, y2 - y1);
 }
