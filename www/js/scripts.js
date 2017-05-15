@@ -3,6 +3,37 @@ var activePanel = "about";
 var playState = "init";
 var songs = {};
 var currentSong = "";
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+camera.position.x = 0;
+camera.position.y = 0;
+camera.position.z = -1;
+camera.lookAt(new THREE.Vector3(0,0,0));
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize( window.innerWidth, window.innerHeight );
+var channelColors = [
+    new THREE.Color('red'),
+    new THREE.Color('lightblue'),
+    new THREE.Color('yellow'),
+    new THREE.Color('purple'),
+    new THREE.Color('green'),
+    new THREE.Color('orange'),
+    new THREE.Color('cyan'),
+    new THREE.Color('blue'),
+    new THREE.Color('lime'),
+    new THREE.Color('fuchsia'),
+    new THREE.Color('pink'),
+    new THREE.Color('white'),
+    new THREE.Color('royalblue'),
+    new THREE.Color('tomato'),
+    new THREE.Color('beige'),
+    new THREE.Color('aqua')
+]
+var activeNotes = [];
+for(var i = 0; i < 16; i++) {
+    activeNotes[i] = [];
+}
+
 
 // Panel changing
 function changePanel(name) {
@@ -78,7 +109,15 @@ function changeState(state) {
 
 // Start a new song
 function playSong(name) {
+    clearScene();
     MIDI.Player.loadFile(songs[name], function() { currentSong = name; changeState("start") });
+}
+
+// Reset Scene
+function clearScene() {
+    while(scene.children.length > 0) {
+        scene.remove(scene.children[0]);
+    }
 }
 
 // Start JS things when page ready
@@ -90,7 +129,8 @@ $(document).ready( function() {
 		instrument: "acoustic_grand_piano",
         onsuccess: function() {
             for(var i = 0; i < 16; i++) {
-                MIDI.programChange(i, 0);
+                if(i != 9)
+                    MIDI.programChange(i, 0);
             }
         }
     });
@@ -106,10 +146,44 @@ $(document).ready( function() {
 	});
 
     // Visualization
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-
-    var renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
     $("#visualize").append( renderer.domElement );
+
+    MIDI.Player.addListener(function(data) {
+        //var now = data.now;
+        //var end = data.end;
+        var channel = data.channel;
+        var message = data.message;
+        var note = data.note;
+        var velocity = data.velocity;
+
+        if(message == 144) { // noteOn
+            var ptsGeometry = new THREE.Geometry();
+            var ptV = new THREE.Vector3();
+            ptV.x = (note / 127) - 0.5;
+            ptV.y = (velocity / 127) - 0.5;
+            ptV.z = 0;
+            ptsGeometry.vertices.push( ptV )
+            var ptsMaterial = new THREE.PointsMaterial( { size: 0.01, color: channelColors[channel] } )
+            var ptObj = new THREE.Points( ptsGeometry, ptsMaterial );
+            scene.add( ptObj );
+            activeNotes[channel][note] = ptObj;
+        } else if(message == 128) { // noteOff
+            if(activeNotes[channel][note] == null)
+                return;
+            scene.remove(activeNotes[channel][note]);
+        } else if(message == 123) {
+            clearScene();
+        }
+    });
+
+    animate();
 });
+
+    function animate() {
+        requestAnimationFrame( animate );
+        render();
+    }
+
+    function render() {
+        renderer.render( scene, camera );
+    }
