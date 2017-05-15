@@ -1,5 +1,35 @@
 # IGME-230 Project 4
 
+## End Project
+
+While doing this project I had to revise a couple things. The main idea, a MIDI music player, stayed the same, and I still used MIDI.js. However, the visualizations ended up a little different.
+
+The Playlist view got slightly simplified. I removed the server-side part of the listings, and the nav was shrunk in width. I also changed the play/pause icons to Font Awesome instead of plain SVG for simplicity. Otherwise the playlist and nav are the same.
+
+![Playlist view](https://github.com/ctm2142/igme230-proj4/raw/master/Playlist.png)
+
+The Piano Roll view got changed to just a Piano View since I couldn't implement the "roll" part of it. MIDI.js did not have a way I could "look ahead" in the notes (or at least not something I found), so I had to go with something similar to vanBasco's Karaoke Player. This means that I have a number of pianos, but no scrolling notes. This is using p5.js, which is the official Processing JS version. I also dropped the idea of soloing tracks for simplicity.
+
+![Piano Roll view](https://github.com/ctm2142/igme230-proj4/raw/master/PianoRoll.png)
+
+The visualization turned out pretty much how I had designed it, with dots created by Three.JS. Unfortunately the dots are small, and since MIDI files are frequently made w/o dynamics it can be rather boring sometimes. I did manage to dig up a MIDI file w/ multiple dynamics, and while it can still be a little dull, it's much more interesting. Definitely room for future improvements here.
+
+![Visualizatio view](https://github.com/ctm2142/igme230-proj4/raw/master/Visualize.png)
+
+Graphics things:
+* Time bar is SVG w/ JS (to be honest it's pretty lazy, but it works)
+* Piano View is canvas using p5.js
+* Visualize is canvas using Three.JS
+
+Above & Beyond:
+* MIDI.js
+* Managing to make two different graphics libraries work on the same page (heh... heh... that was fun... not...)
+* File "uploading" via JS (uploading in quotes b/c it doesn't actually get sent to the server)
+
+Number of browser crashes: somewhere between two and three dozen
+
+## Original Plan
+
 I plan to make JS-based MIDI player. Instead of having three separate pages, there will be one “app” with three panels that switch out. This project will be done without a partner. The MIDI playing will be done using MIDI.js.
 
 ![Piano Roll view](https://github.com/ctm2142/igme230-proj4/raw/master/PianoRoll.png)

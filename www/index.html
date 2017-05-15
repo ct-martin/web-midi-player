@@ -34,7 +34,7 @@
         <nav>
             <p class="nav-title">Web MIDI Player</p>
             <a href="#" id="link-playlist" onclick="changePanel('playlist')">Playlist</a>
-            <a href="#" id="link-pianoroll" onclick="changePanel('pianoroll')">Piano Roll</a>
+            <a href="#" id="link-pianoroll" onclick="changePanel('pianoroll')">Piano View</a>
             <a href="#" id ="link-visualize" onclick="changePanel('visualize')">Visualize</a>
             <a href="#" id="link-about" onclick="changePanel('about')">About</a>
         </nav>
@@ -72,17 +72,22 @@
         <div id="about" class="panel">
             <div class="container">
                 <p>Click "Playlist" in the nav top get started!</p>
-                <p>Note: all notes are played with the piano due to limitations of the library</p>
+                <p>Note: all (non-percussion) notes are played with the piano due to limitations of the library</p>
+                <p>Note: the Visualize view may seem dull, but that's because many MIDI files don't have dynamics (volume)</p>
+                <p>Note: due to some oddly crafted MIDI files sometimes notes will "stick"</p>
+                <p>Note: this can be a bit browser intensive sometimes...</p>
+                <p><a href="https://github.com/ctm2142/igme230-proj4">Documentation</a></p>
                 <p>Uses code from:</p>
                 <ul>
-                    <li>https://www.html5rocks.com/en/tutorials/file/dndfiles/</li>
-                    <li>MIDI.js</li>
-                    <li>Google Fonts</li>
-                    <li>p5.js</li>
-                    <li>Three.js</li>
-                    <li>Font Awesome</li>
-                    <li>jQuery</li>
-                    <li>soundfont</li>
+                    <li><a href="https://www.html5rocks.com/en/tutorials/file/dndfiles/">HTML5Rocks' Drag&amp;Drop Examples</li>
+                    <li><a href="https://github.com/mudcube/MIDI.js/">MIDI.js</a></li>
+                    <li><a href="https://fonts.google.com/">Google Fonts</a></li>
+                    <li><a href="https://p5js.org/">p5.js</a></li>
+                    <li><a href="https://threejs.org/">Three.js</a></li>
+                    <li><a href="http://fontawesome.io/">Font Awesome</a></li>
+                    <li><a href="https://jquery.com/">jQuery</a></li>
+                    <li><a href="https://github.com/gleitz/midi-js-soundfonts">MIDI.js Soundfont (FluidR3_GM)</a></li>
+                    <li>Some inspiration taken from <a href="http://www.vanbasco.com/karaokeplayer/windows.html#piano">vanBasco's Karaoke Player (MIDI Output View)</a></li>
                 </ul>
             </div>
         </div>

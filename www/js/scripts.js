@@ -121,6 +121,11 @@ function clearScene() {
     while(sceneThree.children.length > 0) {
         sceneThree.remove(sceneThree.children[0]);
     }
+    for(var i = 0; i < 16; i++) {
+        activeNotesThree[i] = [];
+        activeNotesP5[i] = [];
+    }
+    redraw();
 }
 
 // Start JS things when page ready
@@ -179,7 +184,7 @@ $(document).ready( function() {
             delete activeNotesThree[channel][note];
             delete activeNotesP5[channel][activeNotesP5[channel].indexOf(note)];
             redrawKey(channel, note);
-        } else if(message == 123) {
+        } else if(message == 123) { // all notes off
             clearScene();
         }
     });
@@ -201,6 +206,9 @@ function setup() {
     var canvas = createCanvas(windowWidth, windowHeight);
     canvas.parent('pianoroll');
     noLoop();
+}
+function draw() {
+    //console.log('draw');
 
     for(var i = 0; i < 16; i++) {
     //for(var i = 0; i < 1; i++) {
@@ -208,9 +216,6 @@ function setup() {
             redrawKey(i, j);
         }
     }
-}
-function draw() {
-    //console.log('draw');
 }
 function redrawKey(channel, note) {
     //console.log("Key: " + note + "@" + channel);
