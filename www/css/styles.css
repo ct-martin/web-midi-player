@@ -108,6 +108,9 @@ main {
 #about {
     display: block;
 }
+#pianoroll {
+    overflow: hidden;
+}
 .container {
     width: 90%;
     min-width: 600px;
