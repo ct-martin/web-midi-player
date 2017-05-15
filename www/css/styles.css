@@ -108,7 +108,7 @@ main {
 #about {
     display: block;
 }
-#pianoroll {
+#pianoroll, #visualize {
     overflow: hidden;
 }
 .container {
