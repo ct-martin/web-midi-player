@@ -51,7 +51,8 @@ function changePanel(name) {
 function handleFileSelect(evt) {
     var files = evt.target.files;
     for (var i = 0, f; f = files[i]; i++) {
-        if (!f.type.match('audio.midi')) {
+        if (!(f.type.match('audio/midi') || f.type.match('audio/mid'))) {
+            console.log("Invalid: " + f.type);
             alert("Only MIDI files are allowed");
             continue;
         }
@@ -186,6 +187,8 @@ $(document).ready( function() {
             redrawKey(channel, note);
         } else if(message == 123) { // all notes off
             clearScene();
+        } else {
+            console.log("?: " + message + ": " + note + "@" + channel);
         }
     });
 
