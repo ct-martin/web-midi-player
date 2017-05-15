@@ -166,25 +166,9 @@ $(document).ready( function() {
         var velocity = data.velocity;
 
         if(message == 144) { // noteOn
-            var ptsGeometry = new THREE.Geometry();
-            var ptV = new THREE.Vector3();
-            ptV.x = (note / 127) - 0.5;
-            ptV.y = (velocity / 127) - 0.5;
-            ptV.z = 0;
-            ptsGeometry.vertices.push( ptV )
-            var ptsMaterial = new THREE.PointsMaterial( { size: 0.01, color: channelColors[channel] } )
-            var ptObj = new THREE.Points( ptsGeometry, ptsMaterial );
-            sceneThree.add( ptObj );
-            activeNotesThree[channel][note] = ptObj;
-            activeNotesP5[channel].push(note);
-            redrawKey(channel, note);
+            noteOn(channel, note, velocity);
         } else if(message == 128) { // noteOff
-            if(activeNotesThree[channel][note] == null)
-                return;
-            sceneThree.remove(activeNotesThree[channel][note]);
-            delete activeNotesThree[channel][note];
-            delete activeNotesP5[channel][activeNotesP5[channel].indexOf(note)];
-            redrawKey(channel, note);
+            noteOff(channel, note);
         } else if(message == 123) { // all notes off
             clearScene();
         } else {
@@ -194,6 +178,32 @@ $(document).ready( function() {
 
     animate();
 });
+
+function noteOn(channel, note, velocity) {
+    while(activeNotesP5[channel].indexOf(note) != -1)
+        noteOff(channel, note);
+    var ptsGeometry = new THREE.Geometry();
+    var ptV = new THREE.Vector3();
+    ptV.x = (note / 127) - 0.5;
+    ptV.y = (velocity / 127) - 0.5;
+    ptV.z = 0;
+    ptsGeometry.vertices.push( ptV )
+    var ptsMaterial = new THREE.PointsMaterial( { size: 0.01, color: channelColors[channel] } )
+    var ptObj = new THREE.Points( ptsGeometry, ptsMaterial );
+    sceneThree.add( ptObj );
+    activeNotesThree[channel][note] = ptObj;
+    activeNotesP5[channel].push(note);
+    redrawKey(channel, note);
+}
+
+function noteOff(channel, note) {
+    if(activeNotesThree[channel][note] != null) {
+        sceneThree.remove(activeNotesThree[channel][note]);
+        delete activeNotesThree[channel][note];
+    }
+    delete activeNotesP5[channel][activeNotesP5[channel].indexOf(note)];
+    redrawKey(channel, note);
+}
 
 // Three.js stuff
 function animate() {
