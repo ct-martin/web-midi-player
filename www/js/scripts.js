@@ -3,14 +3,9 @@ var activePanel = "about";
 var playState = "init";
 var songs = {};
 var currentSong = "";
-var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.position.x = 0;
-camera.position.y = 0;
-camera.position.z = -1;
-camera.lookAt(new THREE.Vector3(0,0,0));
+var sceneThree = new THREE.Scene();
+var cameraThree = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 var renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
 var channelColors = [
     new THREE.Color('red'),
     new THREE.Color('lightblue'),
@@ -29,11 +24,19 @@ var channelColors = [
     new THREE.Color('beige'),
     new THREE.Color('aqua')
 ]
-var activeNotes = [];
-for(var i = 0; i < 16; i++) {
-    activeNotes[i] = [];
-}
+var activeNotesThree = [];
 
+// Set up defaults
+function init() {
+    cameraThree.position.x = 0;
+    cameraThree.position.y = 0;
+    cameraThree.position.z = 1;
+    cameraThree.lookAt(new THREE.Vector3(0,0,0));
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    for(var i = 0; i < 16; i++) {
+        activeNotesThree[i] = [];
+    }
+}
 
 // Panel changing
 function changePanel(name) {
@@ -115,13 +118,15 @@ function playSong(name) {
 
 // Reset Scene
 function clearScene() {
-    while(scene.children.length > 0) {
-        scene.remove(scene.children[0]);
+    while(sceneThree.children.length > 0) {
+        sceneThree.remove(sceneThree.children[0]);
     }
 }
 
 // Start JS things when page ready
 $(document).ready( function() {
+    init();
+
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
     MIDI.loadPlugin({
@@ -165,12 +170,12 @@ $(document).ready( function() {
             ptsGeometry.vertices.push( ptV )
             var ptsMaterial = new THREE.PointsMaterial( { size: 0.01, color: channelColors[channel] } )
             var ptObj = new THREE.Points( ptsGeometry, ptsMaterial );
-            scene.add( ptObj );
-            activeNotes[channel][note] = ptObj;
+            sceneThree.add( ptObj );
+            activeNotesThree[channel][note] = ptObj;
         } else if(message == 128) { // noteOff
-            if(activeNotes[channel][note] == null)
+            if(activeNotesThree[channel][note] == null)
                 return;
-            scene.remove(activeNotes[channel][note]);
+            sceneThree.remove(activeNotesThree[channel][note]);
         } else if(message == 123) {
             clearScene();
         }
@@ -179,11 +184,28 @@ $(document).ready( function() {
     animate();
 });
 
-    function animate() {
-        requestAnimationFrame( animate );
-        render();
-    }
+// Three.js stuff
+function animate() {
+    requestAnimationFrame( animate );
+    render();
+}
+function render() {
+    renderer.render( sceneThree, cameraThree );
+}
 
-    function render() {
-        renderer.render( scene, camera );
-    }
+// p5.js stuff
+function setup() {
+    var canvas = createCanvas(windowWidth, windowHeight);
+    canvas.parent('pianoroll');
+}
+function draw() {
+    
+}
+function drawPiano(x1, y1, x2, y2) {
+    var padding = 10;
+
+}
+function drawOctave(x1, y1, x2, y2) {
+
+}
+function drawKey(x1, x2, y1, y2, )

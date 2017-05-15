@@ -25,7 +25,7 @@
 	<script src="js/midi/synesthesia.js" type="text/javascript"></script>
 	<script src="js/util/dom_request_xhr.js" type="text/javascript"></script>
 	<script src="js/util/dom_request_script.js" type="text/javascript"></script>
-    <script src="js/processing.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.9/p5.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/threejs/r84/three.min.js"></script>
     <script src="js/scripts.js"></script>
 </head>
@@ -52,7 +52,11 @@
     <main>
         <div id="playlist" class="panel">
             <div class="container">
-                <p>Looking for some MIDI files? Try the <a href="http://www.mutopiaproject.org/index.html" target="_blank">Mutopia Project</a>.</p>
+                <p>
+                    Looking for some MIDI files? Try the <a href="http://www.mutopiaproject.org/index.html" target="_blank">Mutopia Project</a>.
+                    I recommend the third part of <a href="http://www.mutopiaproject.org/cgibin/piece-info.cgi?id=276" target="_blank">Beethoven's Moonlight Sonata</a>.
+                    The more variation your MIDI file has, the more interesting the graphics will be.
+                </p>
                 <input type="file" id="files" name="files" multiple />
                 <div id="playlist-list">
                     <p id="playlist-list-empty"><i>Nothing here yet, try adding something above!</i></p>
@@ -74,7 +78,7 @@
                     <li>https://www.html5rocks.com/en/tutorials/file/dndfiles/</li>
                     <li>MIDI.js</li>
                     <li>Google Fonts</li>
-                    <li>Processing.js</li>
+                    <li>p5.js</li>
                     <li>Three.js</li>
                     <li>Font Awesome</li>
                     <li>jQuery</li>
