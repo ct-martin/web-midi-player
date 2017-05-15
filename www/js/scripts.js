@@ -133,7 +133,7 @@ $(document).ready( function() {
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
     MIDI.loadPlugin({
-        soundfontUrl: "http://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/",
+        soundfontUrl: "https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/",
 		instrument: "acoustic_grand_piano",
         onsuccess: function() {
             for(var i = 0; i < 16; i++) {
