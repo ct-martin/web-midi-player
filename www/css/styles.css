@@ -80,11 +80,8 @@ nav a.active {
     border: 1px solid lightgrey;
 }
 #control-timeline-completed {
-    width: 0;
-    height: 5px;
     margin: 0 auto;
     float: left;
-    fill: lightgreen;
 }
 
 
