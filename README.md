@@ -8,4 +8,4 @@ Specs can be found here: https://github.com/LawleyClasses/230-spring2017/blob/ma
 
 Original can be played here: https://apps.ctmartin.me/web-midi-player/original/
 
-Original's code: https://github.com/ct-martin/igme230-proj4/tree/original
+Original's code: https://github.com/ct-martin/web-midi-player/tree/original
